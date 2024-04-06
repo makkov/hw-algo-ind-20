@@ -21,6 +21,7 @@ public class CustomList implements StringList {
 
     @Override
     public String add(String item) {
+        checkCapacity();
         checkItem(item);
         array[size] = item;
         size++;
@@ -29,8 +30,10 @@ public class CustomList implements StringList {
 
     @Override
     public String add(int index, String item) {
+        checkCapacity();
         checkItem(item);
         checkIndex(index);
+        System.arraycopy(array, index, array, index + 1, size - index);
         array[index] = item;
         size++;
         return item;
@@ -147,6 +150,13 @@ public class CustomList implements StringList {
                 "array=" + Arrays.toString(array) +
                 ", size=" + size +
                 '}';
+    }
+
+    private void checkCapacity() {
+        int nextSize = size + 1;
+        if (DEFAULT_ARRAY_SIZE < nextSize) {
+            throw new IncorrectIndexException("New size greater than current size!");
+        }
     }
 
     private void checkItem(String item) {
